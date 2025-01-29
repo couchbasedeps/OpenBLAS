@@ -46,6 +46,8 @@ option(NO_WARMUP "Do not run a benchmark on each startup just to find the best l
 
 option(FIXED_LIBNAME "Use a non-versioned name for the library and no symbolic linking to variant names" OFF)
 
+option(USE_JEMALLOC "Use jemalloc globally across openBLAS" OFF)
+
 set(LIBNAMEPREFIX "" CACHE STRING  "Add a prefix to the openblas part of the library name" )
 set(LIBNAMESUFFIX "" CACHE STRING  "Add a suffix after the openblas part of the library name" )
 
@@ -562,6 +564,17 @@ file(READ   ${CMAKE_CURRENT_SOURCE_DIR}/openblas_config_template.h OPENBLAS_CONF
 file(APPEND ${OPENBLAS_CONFIG_H} "${OPENBLAS_CONFIG_TEMPLATE_H_CONTENTS}\n")
 file(APPEND ${OPENBLAS_CONFIG_H} "#endif /* OPENBLAS_CONFIG_H */\n")
 install (FILES ${OPENBLAS_CONFIG_H} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+if (USE_JEMALLOC)
+  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+  find_package(Jemalloc REQUIRED)
+  if(BUILD_STATIC_LIBS)
+    target_link_libraries(${OpenBLAS_LIBNAME}_static ${JEMALLOC_LIBRARIES})
+  endif()
+  if(BUILD_SHARED_LIBS)
+    target_link_libraries(${OpenBLAS_LIBNAME}_shared ${JEMALLOC_LIBRARIES})
+  endif()
+endif()
 
 if(NOT NOFORTRAN)
   message(STATUS "Generating f77blas.h in ${CMAKE_INSTALL_INCLUDEDIR}")

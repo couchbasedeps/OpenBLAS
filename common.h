@@ -39,6 +39,11 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef USE_JEMALLOC 
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 	/* Assume C declarations for C++ */
