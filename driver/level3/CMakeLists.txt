@@ -171,3 +171,6 @@ endforeach ()
 #
 
 add_library(driver_level3 OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(driver_level3 Jemalloc::jemalloc)
+endif()

@@ -28,9 +28,9 @@ set(BLAS1_MANGLED_SOURCES
 # these all have 'z' sources for complex versions
 set(BLAS2_SOURCES
   gemv.c ger.c
-  trsv.c trmv.c 
+  trsv.c trmv.c
   syr2.c gbmv.c
-  sbmv.c 
+  sbmv.c
   spr2.c
   tbsv.c tbmv.c
   tpsv.c tpmv.c
@@ -246,3 +246,6 @@ if ( BUILD_COMPLEX16 AND NOT  BUILD_DOUBLE)
 endif ()
 
 add_library(interface OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(interface Jemalloc::jemalloc)
+endif()

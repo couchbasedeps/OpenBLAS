@@ -117,3 +117,6 @@ GenerateCombinationObjects("${UNIT_SOURCES}" "UNIT" "N" "" 4)
 GenerateCombinationObjects("${UNIT_SOURCES2}" "UNIT" "N" "" 0 "" "" 3)
 
 add_library(lapack OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(lapack Jemalloc::jemalloc)
+endif()

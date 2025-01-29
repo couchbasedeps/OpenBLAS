@@ -46,6 +46,8 @@ option(NO_WARMUP "Do not run a benchmark on each startup just to find the best l
 
 option(FIXED_LIBNAME "Use a non-versioned name for the library and no symbolic linking to variant names" OFF)
 
+option(USE_JEMALLOC "Use jemalloc globally across openBLAS" OFF)
+
 set(LIBNAMEPREFIX "" CACHE STRING  "Add a prefix to the openblas part of the library name" )
 set(LIBNAMESUFFIX "" CACHE STRING  "Add a suffix after the openblas part of the library name" )
 
@@ -104,6 +106,15 @@ message(WARNING "CMake support is experimental. It does not yet support all buil
 
 include("${PROJECT_SOURCE_DIR}/cmake/utils.cmake")
 include("${PROJECT_SOURCE_DIR}/cmake/system.cmake")
+
+if (USE_JEMALLOC)
+  # Allow the user to specify the path to the jemalloc library by specifying
+  # Jemalloc_ROOT as a CMake variable or environment variable.
+  cmake_policy(SET CMP0074 NEW)
+  add_definitions(-DUSE_JEMALLOC)
+  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+  find_package(Jemalloc REQUIRED)
+endif()
 
 set(OpenBLAS_LIBNAME ${LIBNAMEPREFIX}openblas${LIBNAMESUFFIX}${SUFFIX64_UNDERSCORE})
 
@@ -219,10 +230,16 @@ endif ()
 # add objects to the openblas lib
 if(NOT NO_LAPACK)
   add_library(LAPACK_OVERRIDES OBJECT ${LA_SOURCES})
+  if (USE_JEMALLOC)
+    target_link_libraries(LAPACK_OVERRIDES Jemalloc::jemalloc)
+  endif()
   list(APPEND TARGET_OBJS "$<TARGET_OBJECTS:LAPACK_OVERRIDES>")
 endif()
 if(NOT NO_LAPACKE)
   add_library(LAPACKE OBJECT ${LAPACKE_SOURCES})
+  if (USE_JEMALLOC)
+    target_link_libraries(LAPACKE Jemalloc::jemalloc)
+  endif()
   list(APPEND TARGET_OBJS "$<TARGET_OBJECTS:LAPACKE>")
 endif()
 #if(BUILD_RELAPACK)
@@ -233,11 +250,17 @@ set(OpenBLAS_LIBS "")
 if(BUILD_STATIC_LIBS)
   add_library(${OpenBLAS_LIBNAME}_static STATIC ${TARGET_OBJS} ${OpenBLAS_DEF_FILE})
   target_include_directories(${OpenBLAS_LIBNAME}_static INTERFACE $<INSTALL_INTERFACE:include/openblas${SUFFIX64}>)
+  if (USE_JEMALLOC)
+    target_link_libraries(${OpenBLAS_LIBNAME}_static Jemalloc::jemalloc)
+  endif()
   list(APPEND OpenBLAS_LIBS ${OpenBLAS_LIBNAME}_static)
 endif()
 if(BUILD_SHARED_LIBS)
   add_library(${OpenBLAS_LIBNAME}_shared SHARED ${TARGET_OBJS} ${OpenBLAS_DEF_FILE})
   target_include_directories(${OpenBLAS_LIBNAME}_shared INTERFACE $<INSTALL_INTERFACE:include/openblas${SUFFIX64}>)
+  if (USE_JEMALLOC)
+    target_link_libraries(${OpenBLAS_LIBNAME}_shared Jemalloc::jemalloc)
+  endif()
   list(APPEND OpenBLAS_LIBS ${OpenBLAS_LIBNAME}_shared)
 endif()
 if(BUILD_STATIC_LIBS)
@@ -510,6 +533,9 @@ if (BUILD_BENCHMARKS)
             (NOT ${target_name} STREQUAL "benchmark_max_COMPLEX") AND (NOT ${target_name} STREQUAL "benchmark_max_COMPLEX_DOUBLE") AND
             (NOT ${target_name} STREQUAL "benchmark_min_COMPLEX") AND (NOT ${target_name} STREQUAL "benchmark_min_COMPLEX_DOUBLE"))
           add_executable(${target_name} ${source})
+          if (USE_JEMALLOC)
+            target_link_libraries(${target_name} Jemalloc::jemalloc)
+          endif()
           target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 	    target_link_libraries(${target_name} ${OpenBLAS_LIBNAME} )
 	  #  target_link_libraries(${target_name} ${OpenBLAS_LIBNAME} OpenMP::OpenMP_C)

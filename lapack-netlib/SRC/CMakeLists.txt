@@ -307,7 +307,7 @@ set(DLASRC
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
    dlargv.f dlarrv.f dlartv.f
-   dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f 
+   dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrz.f dlauu2.f
    dlauum.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f
@@ -520,6 +520,10 @@ set_target_properties(
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+
+if (USE_JEMALLOC)
+  target_link_libraries(${LAPACKLIB} Jemalloc::jemalloc)
+endif()
 
 if(USE_XBLAS)
   target_link_libraries(${LAPACKLIB} PRIVATE ${XBLAS_LIBRARY})

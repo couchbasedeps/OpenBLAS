@@ -33,6 +33,10 @@ endif ()
 
 foreach(test_bin ${OpenBLAS_Tests})
 	add_executable(${test_bin} ${test_bin}.f)
+	if (USE_JEMALLOC)
+		target_link_libraries(${test_bin} Jemalloc::jemalloc)
+	endif()
+
 target_link_libraries(${test_bin} ${OpenBLAS_LIBNAME})
 if (USE_OPENMP AND (${CMAKE_Fortran_COMPILER_ID} STREQUAL GNU) AND (${CMAKE_C_COMPILER_ID} STREQUAL Clang))
 	string(REGEX REPLACE "-fopenmp" "" CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}")
@@ -46,7 +50,7 @@ FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/test_helper.ps1
 "[Console]::InputEncoding = New-Object Text.UTF8Encoding $false\n"
 "if (Test-Path $args[2]) { Remove-Item -Force $args[2] } \n"
 "$ErrorActionPreference = \"Stop\"\n"
-"Get-Content $args[1] | & $args[0]\n" 
+"Get-Content $args[1] | & $args[0]\n"
 "If ((Get-Content $args[2] | %{$_ -match \"FATAL\"}) -contains $true) {\n"
 "echo Error\n"
 "exit 1\n"
@@ -85,15 +89,15 @@ if (BUILD_COMPLEX16)
 endif()
 foreach(float_type ${float_types})
 string(TOUPPER ${float_type} float_type_upper)
-add_test(NAME "${float_type}blas1" 
+add_test(NAME "${float_type}blas1"
   COMMAND $<TARGET_FILE:${float_type}blat1>)
-add_test(NAME "${float_type}blas2" 
+add_test(NAME "${float_type}blas2"
   COMMAND ${helper_prefix} $<TARGET_FILE:${float_type}blat2> "${PROJECT_SOURCE_DIR}/test/${float_type}blat2.dat" ${float_type_upper}BLAT2.SUMM)
-add_test(NAME "${float_type}blas3" 
+add_test(NAME "${float_type}blas3"
   COMMAND ${helper_prefix} $<TARGET_FILE:${float_type}blat3> "${PROJECT_SOURCE_DIR}/test/${float_type}blat3.dat" ${float_type_upper}BLAT3.SUMM)
 if (USE_GEMM3M)
 if ((${float_type} STREQUAL "c") OR (${float_type} STREQUAL "z"))
-add_test(NAME "${float_type}blas3_3m" 
+add_test(NAME "${float_type}blas3_3m"
   COMMAND ${helper_prefix} $<TARGET_FILE:${float_type}blat3_3m> "${PROJECT_SOURCE_DIR}/test/${float_type}blat3_3m.dat" ${float_type_upper}BLAT3_3M.SUMM)
 endif()
 endif()

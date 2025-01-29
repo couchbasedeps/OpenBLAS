@@ -28,13 +28,13 @@ set(OpenBLAS_utest_ext_src
 utest_main.c
 ${DIR_EXT}/common.c
 ${DIR_EXT}/xerbla.c
-${DIR_EXT}/test_isamin.c 
-${DIR_EXT}/test_idamin.c 
-${DIR_EXT}/test_icamin.c 
-${DIR_EXT}/test_izamin.c 
-${DIR_EXT}/test_ssum.c 
-${DIR_EXT}/test_dsum.c 
-${DIR_EXT}/test_scsum.c 
+${DIR_EXT}/test_isamin.c
+${DIR_EXT}/test_idamin.c
+${DIR_EXT}/test_icamin.c
+${DIR_EXT}/test_izamin.c
+${DIR_EXT}/test_ssum.c
+${DIR_EXT}/test_dsum.c
+${DIR_EXT}/test_scsum.c
 ${DIR_EXT}/test_dzsum.c
 ${DIR_EXT}/test_samin.c
 ${DIR_EXT}/test_damin.c
@@ -131,9 +131,15 @@ endif()
 
 set(OpenBLAS_utest_bin openblas_utest)
 add_executable(${OpenBLAS_utest_bin} ${OpenBLAS_utest_src})
+if (USE_JEMALLOC)
+  target_link_libraries(${OpenBLAS_utest_bin} Jemalloc::jemalloc)
+endif()
 
 set(OpenBLAS_utest_ext_bin openblas_utest_ext)
 add_executable(${OpenBLAS_utest_ext_bin} ${OpenBLAS_utest_ext_src})
+if (USE_JEMALLOC)
+  target_link_libraries(${OpenBLAS_utest_ext_bin} Jemalloc::jemalloc)
+endif()
 
 target_link_libraries(${OpenBLAS_utest_bin} ${OpenBLAS_LIBNAME})
 target_link_libraries(${OpenBLAS_utest_ext_bin} ${OpenBLAS_LIBNAME})

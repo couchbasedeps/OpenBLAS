@@ -49,4 +49,8 @@ list(REMOVE_DUPLICATES SOURCES)
 
 add_library(${TMGLIB} ${SOURCES})
 target_link_libraries(${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+if (USE_JEMALLOC)
+  target_link_libraries(${TMGLIB} Jemalloc::jemalloc)
+endif()
+
 lapack_install_library(${TMGLIB})

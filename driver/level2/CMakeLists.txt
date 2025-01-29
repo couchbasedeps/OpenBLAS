@@ -62,7 +62,7 @@ GenerateCombinationObjects("${UL_SOURCES}" "LOWER" "U" "" 1 "" "" 3)
 # gbmv uses a lowercase n and t
 GenerateNamedObjects("gbmv_k.c" "" "gbmv_n" false "" "" "" 3)
 GenerateNamedObjects("gbmv_k.c" "TRANS" "gbmv_t" false "" "" "" 3)
-# c/zgbmv 
+# c/zgbmv
 GenerateNamedObjects("zgbmv_k.c" "CONJ" "gbmv_r" false "" "" "" 2)
 GenerateNamedObjects("zgbmv_k.c" "TRANS;CONJ" "gbmv_c" false "" "" "" 2)
 GenerateNamedObjects("zgbmv_k.c" "XCONJ" "gbmv_o" false "" "" "" 2)
@@ -223,3 +223,6 @@ if (USE_THREAD)
 endif ()
 
 add_library(driver_level2 OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(driver_level2 Jemalloc::jemalloc)
+endif()

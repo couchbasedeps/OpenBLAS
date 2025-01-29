@@ -39,6 +39,9 @@ else()
     c_${float_char}blat1c.c
     c_${float_char}blas1.c)
 endif()
+  if (USE_JEMALLOC)
+    target_link_libraries(x${float_char}cblat1 Jemalloc::jemalloc)
+  endif()
   target_link_libraries(x${float_char}cblat1 ${OpenBLAS_LIBNAME})
   if (USE_OPENMP AND (${CMAKE_Fortran_COMPILER_ID} STREQUAL GNU) AND (${CMAKE_C_COMPILER_ID} STREQUAL Clang))
         string(REGEX REPLACE "-fopenmp" "" CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}")
@@ -68,6 +71,9 @@ else()
     c_xerbla.c
     constant.c)
 endif()
+  if (USE_JEMALLOC)
+    target_link_libraries(x${float_char}cblat2 Jemalloc::jemalloc)
+  endif()
   target_link_libraries(x${float_char}cblat2 ${OpenBLAS_LIBNAME})
   if (USE_OPENMP AND (${CMAKE_Fortran_COMPILER_ID} STREQUAL GNU) AND (${CMAKE_C_COMPILER_ID} STREQUAL Clang))
         string(REGEX REPLACE "-fopenmp" "" CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}")
@@ -88,6 +94,9 @@ if (NOT NOFORTRAN)
     auxiliary.c
     c_xerbla.c
     constant.c)
+  if (USE_JEMALLOC)
+    target_link_libraries(x${float_char}cblat3 Jemalloc::jemalloc)
+  endif()
   if (USE_GEMM3M)
   if ((${float_char} STREQUAL "c") OR (${float_char} STREQUAL "z"))
   add_executable(x${float_char}cblat3_3m
@@ -97,6 +106,9 @@ if (NOT NOFORTRAN)
     auxiliary.c
     c_xerbla.c
     constant.c)
+  if (USE_JEMALLOC)
+    target_link_libraries(x${float_char}cblat3_3m Jemalloc::jemalloc)
+  endif()
   endif()
   endif()
 else()
@@ -107,6 +119,9 @@ else()
     auxiliary.c
     c_xerbla.c
     constant.c)
+    if (USE_JEMALLOC)
+      target_link_libraries(x${float_char}cblat3 Jemalloc::jemalloc)
+    endif()
   if (USE_GEMM3M)
   if ((${float_char} STREQUAL "c") OR (${float_char} STREQUAL "z"))
   add_executable(x${float_char}cblat3_3m
@@ -116,6 +131,9 @@ else()
     auxiliary.c
     c_xerbla.c
     constant.c)
+  if (USE_JEMALLOC)
+    target_link_libraries(x${float_char}cblat3_3m Jemalloc::jemalloc)
+  endif()
   endif()
   endif()
 endif()

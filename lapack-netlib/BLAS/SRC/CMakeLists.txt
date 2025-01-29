@@ -103,4 +103,9 @@ set_target_properties(
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+
+if (USE_JEMALLOC)
+  target_link_libraries(${BLASLIB} Jemalloc::jemalloc)
+endif()
+
 lapack_install_library(${BLASLIB})
