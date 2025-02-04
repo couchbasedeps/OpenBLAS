@@ -33,6 +33,11 @@ endif ()
 
 foreach(test_bin ${OpenBLAS_Tests})
 	add_executable(${test_bin} ${test_bin}.f)
+	if (USE_JEMALLOC)
+		target_link_libraries(${test_bin} ${JEMALLOC_LIBRARIES})
+		target_include_directories(${test_bin} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+	endif()
+	
 target_link_libraries(${test_bin} ${OpenBLAS_LIBNAME})
 if (USE_OPENMP AND (${CMAKE_Fortran_COMPILER_ID} STREQUAL GNU) AND (${CMAKE_C_COMPILER_ID} STREQUAL Clang))
 	string(REGEX REPLACE "-fopenmp" "" CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}")

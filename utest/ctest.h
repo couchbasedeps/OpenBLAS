@@ -299,6 +299,9 @@ void assert_dbl_far(double exp, double real, double tol, const char* caller, int
 
 #include <stdlib.h>
 
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h> 
+
 #ifdef __CTEST_APPLE
 #include <dlfcn.h>
 #endif

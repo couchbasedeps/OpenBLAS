@@ -11,6 +11,8 @@
 #include "lapacke_mangling.h"
 
 #include <stdlib.h>
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h> 
 #include <stdarg.h>
 #include <inttypes.h>
 

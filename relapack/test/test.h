@@ -20,6 +20,8 @@
 #include "lapack.h"
 #include "util.h"
 #include <stdlib.h>
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h> 
 #include <stdio.h>
 #include <string.h>
 

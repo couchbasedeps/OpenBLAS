@@ -45,6 +45,9 @@ typedef unsigned long BLASULONG;
 #include "lapack.h"
 #include "blas.h"
 
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h> 
+
 // sytrf helper routines
 void RELAPACK_ssytrf_rec2(const char *, const blasint *, const blasint *, blasint *, float *, const blasint *, blasint *, float *, const blasint *, blasint *);
 void RELAPACK_dsytrf_rec2(const char *, const blasint *, const blasint *, blasint *, double *, const blasint *, blasint *, double *, const blasint *, blasint *);

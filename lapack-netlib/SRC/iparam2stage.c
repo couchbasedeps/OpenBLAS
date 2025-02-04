@@ -1,5 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h> 
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
