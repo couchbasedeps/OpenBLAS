@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#ifdef USE_JEMALLOC
 #define JEMALLOC_MANGLE
-#include <jemalloc/jemalloc.h> 
+#include <jemalloc/jemalloc.h>
+#endif
 #include <complex.h>
 #ifdef complex
 #undef complex
