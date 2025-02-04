@@ -131,9 +131,17 @@ endif()
 
 set(OpenBLAS_utest_bin openblas_utest)
 add_executable(${OpenBLAS_utest_bin} ${OpenBLAS_utest_src})
+if (USE_JEMALLOC)
+  target_link_libraries(${OpenBLAS_utest_bin} ${JEMALLOC_LIBRARIES})
+  target_include_directories(${OpenBLAS_utest_bin} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()
 
 set(OpenBLAS_utest_ext_bin openblas_utest_ext)
 add_executable(${OpenBLAS_utest_ext_bin} ${OpenBLAS_utest_ext_src})
+if (USE_JEMALLOC)
+  target_link_libraries(${OpenBLAS_utest_ext_bin} ${JEMALLOC_LIBRARIES})
+  target_include_directories(${OpenBLAS_utest_ext_bin} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()
 
 target_link_libraries(${OpenBLAS_utest_bin} ${OpenBLAS_LIBNAME})
 target_link_libraries(${OpenBLAS_utest_ext_bin} ${OpenBLAS_LIBNAME})

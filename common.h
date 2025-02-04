@@ -82,6 +82,10 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef USE_JEMALLOC
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h>
+#endif
 
 #if !defined(_MSC_VER)
 #include <unistd.h>

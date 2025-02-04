@@ -86,3 +86,7 @@ endif ()
 #endif
 
 add_library(driver_others OBJECT ${OPENBLAS_SRC} ${MEMORY} ${SMP_SOURCES} ${COMMON_SOURCES})
+if (USE_JEMALLOC)
+  target_link_libraries(driver_others ${JEMALLOC_LIBRARIES})
+  target_include_directories(driver_others PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()

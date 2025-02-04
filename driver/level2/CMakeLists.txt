@@ -223,3 +223,7 @@ if (USE_THREAD)
 endif ()
 
 add_library(driver_level2 OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(driver_level2 ${JEMALLOC_LIBRARIES})
+  target_include_directories(driver_level2 PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()

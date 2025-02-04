@@ -83,6 +83,12 @@ target_include_directories(${LAPACKELIB} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+
+if (USE_JEMALLOC)
+  target_link_libraries(${LAPACKELIB} ${JEMALLOC_LIBRARIES})
+  target_include_directories(${LAPACKELIB} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()
+
 if(WIN32 AND NOT UNIX)
   target_compile_definitions(${LAPACKELIB} PUBLIC HAVE_LAPACK_CONFIG_H LAPACK_COMPLEX_STRUCTURE)
   message(STATUS "Windows BUILD")

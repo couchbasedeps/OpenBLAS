@@ -126,3 +126,8 @@ target_include_directories(${CBLASLIB} PUBLIC
 )
 target_link_libraries(${CBLASLIB} PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(${CBLASLIB})
+
+if (USE_JEMALLOC)
+  target_link_libraries(${CBLASLIB} ${JEMALLOC_LIBRARIES})
+  target_include_directories(${CBLASLIB} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()

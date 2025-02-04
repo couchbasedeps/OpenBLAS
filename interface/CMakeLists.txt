@@ -246,3 +246,7 @@ if ( BUILD_COMPLEX16 AND NOT  BUILD_DOUBLE)
 endif ()
 
 add_library(interface OBJECT ${OPENBLAS_SRC})
+if (USE_JEMALLOC)
+  target_link_libraries(interface ${JEMALLOC_LIBRARIES})
+  target_include_directories(interface PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()

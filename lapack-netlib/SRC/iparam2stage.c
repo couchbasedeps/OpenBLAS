@@ -1,5 +1,9 @@
 #include <math.h>
 #include <stdlib.h>
+#ifdef USE_JEMALLOC
+#define JEMALLOC_MANGLE
+#include <jemalloc/jemalloc.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>

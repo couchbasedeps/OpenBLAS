@@ -521,6 +521,11 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 
+if (USE_JEMALLOC)
+  target_link_libraries(${LAPACKLIB} ${JEMALLOC_LIBRARIES})
+  target_include_directories(${LAPACKLIB} PRIVATE ${JEMALLOC_INCLUDE_DIRS})
+endif()
+
 if(USE_XBLAS)
   target_link_libraries(${LAPACKLIB} PRIVATE ${XBLAS_LIBRARY})
 endif()
